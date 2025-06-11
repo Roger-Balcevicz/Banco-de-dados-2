@@ -1,5 +1,5 @@
 CREATE TABLE setor (
-    codsetor SERIAL PRIMARY KEY,
+    codsetor SERIAL PRIMARY KEY,a
     nome VARCHAR(100) NOT NULL
 );
 
