@@ -167,3 +167,6 @@ INSERT INTO ingrediente_receita (codreceita, codingrediente, quantidade_necessar
 (6, 8, 1.8),
 (7, 9, 0.4),
 (10, 8, 2.0);
+
+ALTER TABLE ingrediente
+ADD COLUMN estoque_minimo NUMERIC DEFAULT 10;
