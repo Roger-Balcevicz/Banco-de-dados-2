@@ -86,9 +86,6 @@ O sistema conta com 8 tabelas principais:
 - `vw_avisos_estoque_baixo`  
   → Ingredientes abaixo do estoque mínimo
 
-- `vw_receita_custo_detalhado`  
-  → Lista de ingredientes e custo total por receita
-
 - `vw_movimentacao_resumida`  
   → Relatório diário das entradas e saídas
 
