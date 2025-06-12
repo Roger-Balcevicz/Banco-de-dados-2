@@ -22,18 +22,7 @@ SELECT
 FROM ingrediente
 WHERE estoque_atual < estoque_minimo;
 
--- 3. vw_movimentacao_resumida
-CREATE OR REPLACE VIEW vw_movimentacao_resumida AS
-SELECT 
-    data_movimentacao, 
-    tipo_movimentacao, 
-    COUNT(*) AS total_movimentacoes, 
-    SUM(quantidade) AS total_quantidade
-FROM movimentacao_estoque
-GROUP BY data_movimentacao, tipo_movimentacao
-ORDER BY data_movimentacao DESC;
-
--- 4. vw_compras_por_fornecedor
+-- 3. vw_compras_por_fornecedor
 CREATE OR REPLACE VIEW vw_compras_por_fornecedor AS
 SELECT 
     f.nome AS fornecedor, 
