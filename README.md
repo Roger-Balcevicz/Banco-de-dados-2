@@ -101,6 +101,7 @@ O sistema conta com 8 tabelas principais:
 - `objetos.sql` – Functions, procedures, triggers e views
 - `Projeto_Final_BD2_2025.docx` – Documento com tabelas, campos e etc
 - `indices_tabelas.sql` – Documento com índices das tabelas
+- `view_tabelas.sql` – Documento com as views das tabelas
 
 ---
 
