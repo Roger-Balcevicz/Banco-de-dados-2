@@ -86,9 +86,6 @@ O sistema conta com 8 tabelas principais:
 - `vw_avisos_estoque_baixo`  
   → Ingredientes abaixo do estoque mínimo
 
-- `vw_movimentacao_resumida`  
-  → Relatório diário das entradas e saídas
-
 - `vw_compras_por_fornecedor`  
   → Total gasto por fornecedor
 
@@ -98,7 +95,7 @@ O sistema conta com 8 tabelas principais:
 
 - `criacao_tabelas.sql` – Criação das tabelas principais
 - `inserts_exemplo.sql` – Dados de exemplo (10 registros por tabela)
-- `objetos.sql` – Functions, procedures, triggers e views
+- `objetos.sql` – Functions, procedures, triggers
 - `Projeto_Final_BD2_2025.docx` – Documento com tabelas, campos e etc
 - `indices_tabelas.sql` – Documento com índices das tabelas
 - `view_tabelas.sql` – Documento com as views das tabelas
