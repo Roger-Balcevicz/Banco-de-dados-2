@@ -17,6 +17,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
 -- 2. fn_quantidade_disponivel
 CREATE OR REPLACE FUNCTION fn_quantidade_disponivel(id INT)
 RETURNS NUMERIC AS $$
@@ -166,6 +167,11 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE TRIGGER trg_recalcular_estoque_total
+AFTER INSERT OR UPDATE OR DELETE ON movimentacao_estoque
+FOR EACH ROW
+EXECUTE FUNCTION fn_atualiza_estoque();
+
 --2 Dispara aviso quando estoque de um ingrediente ficar abaixo do mínimo.
 CREATE OR REPLACE FUNCTION fn_aviso_estoque_baixo()
 RETURNS TRIGGER AS $$
@@ -187,3 +193,8 @@ BEGIN
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_baixo_estoque
+AFTER INSERT OR UPDATE ON movimentacao_estoque
+FOR EACH ROW
+EXECUTE FUNCTION fn_aviso_estoque_baixo();
