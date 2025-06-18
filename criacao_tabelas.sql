@@ -81,6 +81,6 @@ DEFAULT 1;
 
 ALTER TABLE ordem_compra
 ADD CONSTRAINT fk_ordem_status
-FOREIGN KEY (codstatus) 
+FOREIGN KEY (status_id) 
 REFERENCES status_ordem(id);
 
