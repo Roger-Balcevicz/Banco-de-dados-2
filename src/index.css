@@ -1,0 +1,242 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 98%;
+    --foreground: 220 14% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 14% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 14% 10%;
+
+    --primary: 25 95% 53%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 14% 14%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 8% 46%;
+
+    --accent: 25 95% 96%;
+    --accent-foreground: 25 95% 26%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 72% 52%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --danger: 0 84% 60%;
+    --danger-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 25 95% 53%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 220 14% 10%;
+    --sidebar-foreground: 220 14% 96%;
+    --sidebar-primary: 25 95% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 18%;
+    --sidebar-accent-foreground: 220 14% 96%;
+    --sidebar-border: 220 14% 18%;
+    --sidebar-ring: 25 95% 53%;
+  }
+
+  .dark {
+    --background: 220 14% 10%;
+    --foreground: 220 14% 96%;
+
+    --card: 220 14% 13%;
+    --card-foreground: 220 14% 96%;
+
+    --popover: 220 14% 13%;
+    --popover-foreground: 220 14% 96%;
+
+    --primary: 25 95% 53%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 18%;
+    --secondary-foreground: 220 14% 96%;
+
+    --muted: 220 14% 18%;
+    --muted-foreground: 220 14% 72%;
+
+    --accent: 25 95% 26%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 72% 52%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --danger: 0 84% 60%;
+    --danger-foreground: 0 0% 100%;
+
+    --border: 240 3.7% 15.9%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 25 95% 53%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body {
+    @apply h-full overflow-x-hidden antialiased;
+  }
+
+  body {
+    @apply bg-gradient-to-br from-orange-50 via-yellow-50 to-red-50 text-foreground font-sans;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Glass morphism para temática do restaurante */
+  .glass {
+    @apply bg-white/30 backdrop-blur-lg border border-orange-200/50 shadow-glass;
+  }
+
+  .glass-dark {
+    @apply bg-orange-900/30 backdrop-blur-lg border border-orange-300/20 shadow-glass;
+  }
+
+  /* Card transitions com tema de comida */
+  .card-hover-effect {
+    @apply transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl;
+  }
+  
+  /* Custom scrollbar para webkit browsers */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-orange-300 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-orange-400;
+  }
+
+  /* Chart & data visualization styles */
+  .chart-container {
+    @apply w-full h-full min-h-[200px] rounded-lg overflow-hidden shadow-lg;
+  }
+
+  .animate-enter {
+    @apply animate-slide-up;
+  }
+
+  /* Stock level indicators */
+  .stock-high {
+    @apply text-green-600;
+  }
+  
+  .stock-medium {
+    @apply text-yellow-600;
+  }
+
+  .stock-low {
+    @apply text-red-600;
+  }
+
+  /* Loading states com tema gastronômico */
+  .loading-pulse {
+    @apply animate-pulse-gentle;
+  }
+
+  /* Animações específicas para comida */
+  .food-float {
+    @apply animate-float;
+  }
+
+  .ingredient-bounce {
+    @apply animate-bounce;
+  }
+
+  /* Efeitos de hover para cards de ingredientes */
+  .ingredient-card {
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-xl hover:bg-white/90;
+  }
+
+  /* Efeitos especiais para alertas */
+  .alert-urgent {
+    @apply animate-pulse-gentle border-l-4 border-l-red-500;
+  }
+
+  /* Typography para o tema gastronômico */
+  .restaurant-title {
+    font-family: 'Pacifico', cursive;
+    @apply text-orange-600 drop-shadow-sm;
+  }
+}
+
+/* Animações customizadas para o tema de restaurante */
+@keyframes sizzle {
+  0%, 100% { 
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(1.05) rotate(1deg);
+    opacity: 0.9;
+  }
+}
+
+@keyframes steam {
+  0% { 
+    transform: translateY(0) scale(1);
+    opacity: 0.7;
+  }
+  100% { 
+    transform: translateY(-20px) scale(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes ingredient-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(251, 146, 60, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(251, 146, 60, 0.6);
+  }
+}
+
+.animate-sizzle {
+  animation: sizzle 2s ease-in-out infinite;
+}
+
+.animate-steam {
+  animation: steam 3s ease-out infinite;
+}
+
+.animate-ingredient-glow {
+  animation: ingredient-glow 3s ease-in-out infinite;
+}
