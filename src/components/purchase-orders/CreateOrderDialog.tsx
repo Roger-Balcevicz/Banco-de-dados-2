@@ -81,7 +81,7 @@ export function CreateOrderDialog({ onOrderCreated }: CreateOrderDialogProps) {
           data_ordem: data.data_ordem,
           codfornecedor: parseInt(data.codfornecedor),
           codsetor: data.codsetor ? parseInt(data.codsetor) : null,
-          status: 'pendente'
+          status_id: 1
         })
         .select()
         .single();

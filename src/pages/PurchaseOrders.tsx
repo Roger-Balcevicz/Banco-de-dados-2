@@ -11,11 +11,12 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { CreateOrderDialog } from '@/components/purchase-orders/CreateOrderDialog';
 import { ViewOrderItemsDialog } from '@/components/purchase-orders/ViewOrderItemsDialog';
+import { EditOrderItemsDialog } from '@/components/purchase-orders/EditOrderItemsDialog';
 
 const PurchaseOrders = () => {
   const { ordens, loading: loadingOrdens, refetch } = useOrdensCompra();
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<number>(0);
   const [dateFrom, setDateFrom] = useState<string>('');
   const [dateTo, setDateTo] = useState<string>('');
 
@@ -24,8 +25,8 @@ const PurchaseOrders = () => {
     let filtered = [...ordens];
 
     // Filtro por status
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter(ordem => ordem.status === statusFilter);
+    if (statusFilter !== 0) {
+      filtered = filtered.filter(ordem => ordem.status_id === statusFilter);
     }
 
     // Filtro por período
@@ -168,11 +169,9 @@ const PurchaseOrders = () => {
                     <SelectValue placeholder="Todos os status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Todos</SelectItem>
-                    <SelectItem value="pendente">Pendente</SelectItem>
-                    <SelectItem value="aprovado">Aprovado</SelectItem>
-                    <SelectItem value="recebido">Recebido</SelectItem>
-                    <SelectItem value="cancelado">Cancelado</SelectItem>
+                    <SelectItem value={0}>Todos</SelectItem>
+                    <SelectItem value={1}>Pendente</SelectItem>
+                    <SelectItem value={2}>Recebido</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -200,7 +199,7 @@ const PurchaseOrders = () => {
                 <Button 
                   variant="outline" 
                   onClick={() => {
-                    setStatusFilter('all');
+                    setStatusFilter(0);
                     setDateFrom('');
                     setDateTo('');
                   }}
@@ -276,9 +275,9 @@ const PurchaseOrders = () => {
                         <ViewOrderItemsDialog 
                           codordem={ordem.codordem}
                         />
-                        <Button size="sm" variant="outline">
-                          Editar
-                        </Button>
+                        <EditOrderItemsDialog 
+                          codordem={ordem.codordem}
+                        />
                       </div>
                     </TableCell>
                   </TableRow>
