@@ -101,3 +101,9 @@ INSERT INTO ingrediente_receita (codreceita, codingrediente, quantidade_necessar
 (6, 8, 1.8),
 (7, 9, 0.4),
 (10, 8, 2.0);
+
+INSERT INTO status (nome) values
+('Pendente'), -- id = 1
+('Recebido'), -- id = 2
+
+
