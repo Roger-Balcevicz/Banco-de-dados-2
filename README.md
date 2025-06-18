@@ -25,7 +25,7 @@ Este sistema tem como objetivo gerenciar de forma eficiente o estoque, compras e
 
 ## 🗃️ Modelo de Dados
 
-O sistema conta com 8 tabelas principais:
+O sistema conta com 9 tabelas principais:
 
 1. **ingrediente** – Cadastro e controle de estoque de insumos
 2. **fornecedor** – Informações dos fornecedores
@@ -35,12 +35,13 @@ O sistema conta com 8 tabelas principais:
 6. **setor** – Áreas internas (cozinha, bar, confeitaria, etc.)
 7. **receita** – Pratos do restaurante
 8. **ingrediente_receita** – Relacionamento entre receitas e seus ingredientes
+9. **status** - Demonstrar os status das ordens de compra 'Pendente' e 'Recebido'
 
 ---
 
 ## ⚙️ Objetos SQL implementados
 
-### 🔁 Procedures / Functions
+### 🔁 Functions
 
 - `fn_calcular_custo_receita(codreceita)`  
   → Soma o custo total dos ingredientes de uma receita
@@ -51,25 +52,22 @@ O sistema conta com 8 tabelas principais:
 - `fn_previsao_reposicao(codingrediente)`  
   → Estima dias restantes até o fim do estoque
 
-- `sp_inserir_ordem_compra(...)`  
+- `fn_inserir_ordem_compra(...)`  
   → Insere ordem de compra com múltiplos itens via arrays
 
-- `sp_registrar_movimentacao(...)`  
+- `fn_registrar_movimentacao(...)`  
   → Insere movimentação (entrada/saída/produção)
 
-- `sp_repor_estoque_minimo()`  
-  → Cria ordens de compra para ingredientes abaixo do mínimo
-
-- `sp_processar_receita(codreceita, codsetor)`  
-  → Desconta do estoque os ingredientes usados em uma receita
-
-- `sp_ajustar_estoque(...)`  
+- `fn_ajustar_estoque(...)`  
   → Permite ajustes manuais (inventário)
 
 ---
 
 ### 🔔 Triggers
 
+-`trg_recebimento_ordem_compra`
+  → Dispara movimentação de entrada no estoque automaticamento quando a ordem de compra é marcada como 'recebido'
+  
 - `trg_recalcular_estoque_total`  
   → Atualiza `estoque_atual` com base nas movimentações
 

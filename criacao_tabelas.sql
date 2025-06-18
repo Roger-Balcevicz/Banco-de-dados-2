@@ -69,3 +69,18 @@ CREATE TABLE ingrediente_receita (
 -- Alteração na tabela ingrediente: adicionado campo estoque_minimo
 ALTER TABLE ingrediente
 ADD COLUMN estoque_minimo NUMERIC DEFAULT 10; 
+
+CREATE TABLE status (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL
+);
+
+ALTER TABLE ordem_compra
+ADD COLUMN codstatus INT NOT NULL
+DEFAULT 1;
+
+ALTER TABLE ordem_compra
+ADD CONSTRAINT fk_ordem_status
+FOREIGN KEY (status_id) 
+REFERENCES status_ordem(id);
+
