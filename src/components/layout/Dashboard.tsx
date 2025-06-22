@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { useEstatisticas, useIngredientes, useFornecedores, useOrdensCompra, useMovimentacaoEstoque } from '@/hooks/useSupabaseData';
 import { StatsCard } from '@/components/ui/StatsCard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ChefHat, Package, AlertTriangle, TrendingUp, Users, Utensils, Activity, FileText } from 'lucide-react';
+import { ChefHat, Package, AlertTriangle, Activity, Users, FileText } from 'lucide-react';
 
 export function Dashboard() {
   const { stats, loading: statsLoading } = useEstatisticas();
@@ -23,13 +22,11 @@ export function Dashboard() {
       </div>
     );
   }
-  
-  // Ingredientes com estoque baixo
+
   const ingredientesEstoqueBaixo = ingredientes.filter(ing => 
     (ing.estoque_atual || 0) <= (ing.estoque_minimo || 0)
   );
 
-  // Movimentações recentes
   const movimentacoesRecentes = movimentacoes.slice(0, 5);
 
   return (
@@ -43,8 +40,7 @@ export function Dashboard() {
           <p className="text-gray-600">Sistema de Gestão de Estoque e Suprimentos</p>
         </div>
       </div>
-      
-      {/* Stats Row */}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 animate-slide-up" style={{ '--delay': '100ms' } as React.CSSProperties}>
         <StatsCard 
           title="Total de Ingredientes" 
@@ -76,10 +72,8 @@ export function Dashboard() {
           className="bg-purple-50 border-purple-200 hover:bg-purple-100 transition-colors duration-300"
         />
       </div>
-      
-      {/* Content Grid */}
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Ingredientes com Estoque Baixo */}
         <Card className="lg:col-span-1">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -114,7 +108,6 @@ export function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Movimentações Recentes */}
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -169,9 +162,7 @@ export function Dashboard() {
         </Card>
       </div>
 
-      {/* Fornecedores e Ordens */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-        {/* Fornecedores */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -199,7 +190,6 @@ export function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* Ordens de Compra Recentes */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -214,31 +204,34 @@ export function Dashboard() {
               </p>
             ) : (
               <div className="space-y-2">
-                {ordens.slice(0, 5).map((ordem) => (
-                  <div key={ordem.codordem} className="flex justify-between items-center p-2 bg-purple-50 rounded-lg border border-purple-200">
-                    <div>
-                      <p className="font-medium text-purple-800">
-                        Ordem #{ordem.codordem}
-                      </p>
-                      <p className="text-xs text-purple-600">
-                        {ordem.fornecedor?.nome || 'Fornecedor N/A'}
-                      </p>
+                {[...ordens]
+                  .sort((a, b) => b.codordem - a.codordem)
+                  .slice(0, 5)
+                  .map((ordem) => (
+                    <div key={ordem.codordem} className="flex justify-between items-center p-2 bg-purple-50 rounded-lg border border-purple-200">
+                      <div>
+                        <p className="font-medium text-purple-800">
+                          Ordem #{ordem.codordem}
+                        </p>
+                        <p className="text-xs text-purple-600">
+                          {ordem.fornecedor?.nome || 'Fornecedor N/A'}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-purple-600">
+                          {new Date(ordem.data_ordem).toLocaleDateString('pt-BR')}
+                        </p>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          ordem.status === 'pendente' ? 'bg-yellow-100 text-yellow-800' :
+                          ordem.status === 'confirmado' ? 'bg-blue-100 text-blue-800' :
+                          ordem.status === 'entregue' ? 'bg-green-100 text-green-800' :
+                          'bg-gray-100 text-gray-800'
+                        }`}>
+                          {ordem.status || 'N/A'}
+                        </span>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-xs text-purple-600">
-                        {new Date(ordem.data_ordem).toLocaleDateString('pt-BR')}
-                      </p>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        ordem.status === 'pendente' ? 'bg-yellow-100 text-yellow-800' :
-                        ordem.status === 'confirmado' ? 'bg-blue-100 text-blue-800' :
-                        ordem.status === 'entregue' ? 'bg-green-100 text-green-800' :
-                        'bg-gray-100 text-gray-800'
-                      }`}>
-                        {ordem.status || 'N/A'}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             )}
           </CardContent>

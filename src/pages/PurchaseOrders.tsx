@@ -1,10 +1,9 @@
-
 import React, { useState, useMemo } from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { useOrdensCompra } from '@/hooks/useSupabaseData';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ShoppingCart, Plus, ChevronUp, ChevronDown, Filter, Calendar } from 'lucide-react';
+import { ShoppingCart, Plus, ChevronUp, ChevronDown, Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -20,28 +19,45 @@ const PurchaseOrders = () => {
   const [dateFrom, setDateFrom] = useState<string>('');
   const [dateTo, setDateTo] = useState<string>('');
 
-  // Filtrar e ordenar ordens
+  // Função para mapear status_id para texto
+  const getStatusText = (status_id: number) => {
+    switch (status_id) {
+      case 1:
+        return 'Pendente';
+      case 2:
+        return 'Recebido';
+      default:
+        return 'Desconhecido';
+    }
+  };
+
+  // Função para definir a cor do badge
+  const getStatusColor = (status_id: number) => {
+    switch (status_id) {
+      case 1:
+        return 'bg-yellow-100 text-yellow-800';
+      case 2:
+        return 'bg-green-100 text-green-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
   const filteredAndSortedOrdens = useMemo(() => {
     let filtered = [...ordens];
 
-    // Filtro por status
     if (statusFilter !== 0) {
       filtered = filtered.filter(ordem => ordem.status_id === statusFilter);
     }
 
-    // Filtro por período
     if (dateFrom) {
-      filtered = filtered.filter(ordem => 
-        new Date(ordem.data_ordem) >= new Date(dateFrom)
-      );
-    }
-    if (dateTo) {
-      filtered = filtered.filter(ordem => 
-        new Date(ordem.data_ordem) <= new Date(dateTo)
-      );
+      filtered = filtered.filter(ordem => new Date(ordem.data_ordem) >= new Date(dateFrom));
     }
 
-    // Ordenação por código
+    if (dateTo) {
+      filtered = filtered.filter(ordem => new Date(ordem.data_ordem) <= new Date(dateTo));
+    }
+
     return filtered.sort((a, b) => {
       if (sortOrder === 'desc') {
         return b.codordem - a.codordem;
@@ -60,33 +76,13 @@ const PurchaseOrders = () => {
       <PageLayout title="Ordens de Compra">
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-orange-600 border-t-transparent mx-auto mb-4">
-              <div className="h-8 w-8 bg-orange-600 rounded-full mx-auto mt-2 relative">
-                <div className="absolute inset-1 bg-white rounded-full"></div>
-                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-1 h-2 bg-orange-600 rounded-t"></div>
-              </div>
-            </div>
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-orange-600 border-t-transparent mx-auto mb-4" />
             <p className="text-gray-600 animate-pulse">Carregando ordens de compra...</p>
           </div>
         </div>
       </PageLayout>
     );
   }
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'pendente':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'aprovado':
-        return 'bg-blue-100 text-blue-800';
-      case 'recebido':
-        return 'bg-green-100 text-green-800';
-      case 'cancelado':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
 
   return (
     <PageLayout title="Ordens de Compra">
@@ -105,7 +101,7 @@ const PurchaseOrders = () => {
               <p className="text-xs text-blue-600">registradas</p>
             </CardContent>
           </Card>
-          
+
           <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-yellow-700 flex items-center gap-2">
@@ -115,12 +111,12 @@ const PurchaseOrders = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-yellow-800">
-                {ordens.filter(o => o.status === 'pendente').length}
+                {ordens.filter(o => o.status_id === 1).length}
               </div>
               <p className="text-xs text-yellow-600">aguardando</p>
             </CardContent>
           </Card>
-          
+
           <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-green-700 flex items-center gap-2">
@@ -130,12 +126,12 @@ const PurchaseOrders = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-green-800">
-                {ordens.filter(o => o.status === 'recebido').length}
+                {ordens.filter(o => o.status_id === 2).length}
               </div>
               <p className="text-xs text-green-600">finalizadas</p>
             </CardContent>
           </Card>
-          
+
           <Card className="bg-gradient-to-br from-red-50 to-red-100 border-red-200">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-red-700 flex items-center gap-2">
@@ -164,7 +160,7 @@ const PurchaseOrders = () => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Status</label>
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <Select value={statusFilter} onValueChange={(value) => setStatusFilter(Number(value))}>
                   <SelectTrigger>
                     <SelectValue placeholder="Todos os status" />
                   </SelectTrigger>
@@ -175,7 +171,7 @@ const PurchaseOrders = () => {
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="space-y-2">
                 <label className="text-sm font-medium">Data Inicial</label>
                 <Input
@@ -184,7 +180,7 @@ const PurchaseOrders = () => {
                   onChange={(e) => setDateFrom(e.target.value)}
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <label className="text-sm font-medium">Data Final</label>
                 <Input
@@ -193,11 +189,11 @@ const PurchaseOrders = () => {
                   onChange={(e) => setDateTo(e.target.value)}
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <label className="text-sm font-medium">&nbsp;</label>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => {
                     setStatusFilter(0);
                     setDateFrom('');
@@ -230,7 +226,7 @@ const PurchaseOrders = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead 
+                  <TableHead
                     className="cursor-pointer hover:bg-gray-50 select-none"
                     onClick={toggleSortOrder}
                   >
@@ -266,25 +262,21 @@ const PurchaseOrders = () => {
                       {ordem.setor?.nome || 'N/A'}
                     </TableCell>
                     <TableCell>
-                      <Badge className={getStatusColor(ordem.status || 'pendente')}>
-                        {ordem.status || 'pendente'}
+                      <Badge className={getStatusColor(ordem.status_id)}>
+                        {getStatusText(ordem.status_id)}
                       </Badge>
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-2">
-                        <ViewOrderItemsDialog 
-                          codordem={ordem.codordem}
-                        />
-                        <EditOrderItemsDialog 
-                          codordem={ordem.codordem}
-                        />
+                        <ViewOrderItemsDialog codordem={ordem.codordem} />
+                        <EditOrderItemsDialog codordem={ordem.codordem} />
                       </div>
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
-            
+
             {filteredAndSortedOrdens.length === 0 && (
               <div className="text-center py-8">
                 <ShoppingCart className="h-12 w-12 text-gray-400 mx-auto mb-4" />

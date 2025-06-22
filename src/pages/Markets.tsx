@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { useFornecedores } from '@/hooks/useSupabaseData';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, MapPin, Star, Clock, Phone, Mail, TrendingUp, Award, Package } from 'lucide-react';
+import { Users, Package, TrendingUp, Award, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { CreateOrderFromSupplierDialog } from '@/components/suppliers/CreateOrderFromSupplierDialog';
@@ -14,8 +13,7 @@ const Markets = () => {
   const { fornecedores, loading: loadingFornecedores, refetch } = useFornecedores();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFornecedor, setSelectedFornecedor] = useState(null);
-  
-  // Filtrar fornecedores
+
   const filteredFornecedores = fornecedores.filter(fornecedor =>
     fornecedor.nome.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -38,6 +36,7 @@ const Markets = () => {
       <div className="space-y-6">
         {/* Estatísticas dos Fornecedores */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {/* Total de Fornecedores */}
           <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-blue-700 flex items-center gap-2">
@@ -50,7 +49,8 @@ const Markets = () => {
               <p className="text-xs text-blue-600">cadastrados no sistema</p>
             </CardContent>
           </Card>
-          
+
+          {/* Fornecedores Ativos */}
           <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-green-700 flex items-center gap-2">
@@ -63,7 +63,8 @@ const Markets = () => {
               <p className="text-xs text-green-600">disponíveis</p>
             </CardContent>
           </Card>
-          
+
+          {/* Com Contato */}
           <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-orange-700 flex items-center gap-2">
@@ -78,7 +79,8 @@ const Markets = () => {
               <p className="text-xs text-orange-600">fornecedores</p>
             </CardContent>
           </Card>
-          
+
+          {/* Sem Contato */}
           <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium text-purple-700 flex items-center gap-2">
@@ -94,8 +96,8 @@ const Markets = () => {
             </CardContent>
           </Card>
         </div>
-        
-        {/* Busca */}
+
+        {/* Campo de Busca */}
         <div className="bg-white p-4 rounded-lg border shadow-sm">
           <Input
             placeholder="Buscar fornecedores por nome..."
@@ -104,7 +106,7 @@ const Markets = () => {
             className="w-full"
           />
         </div>
-        
+
         {/* Lista de Fornecedores */}
         <Card>
           <CardHeader>
@@ -115,36 +117,38 @@ const Markets = () => {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredFornecedores.map((fornecedor) => (
-                <div 
-                  key={fornecedor.codfornecedor} 
-                  className="p-4 border rounded-lg hover:shadow-md transition-shadow cursor-pointer"
-                  onClick={() => setSelectedFornecedor(fornecedor)}
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-semibold text-gray-800">{fornecedor.nome}</h3>
-                    <span className="text-xs text-gray-500">#{fornecedor.codfornecedor}</span>
+              {[...filteredFornecedores]
+                .sort((a, b) => a.codfornecedor - b.codfornecedor)
+                .map((fornecedor) => (
+                  <div
+                    key={fornecedor.codfornecedor}
+                    className="p-4 border rounded-lg hover:shadow-md transition-shadow cursor-pointer"
+                    onClick={() => setSelectedFornecedor(fornecedor)}
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="font-semibold text-gray-800">{fornecedor.nome}</h3>
+                      <span className="text-xs text-gray-500">#{fornecedor.codfornecedor}</span>
+                    </div>
+
+                    {fornecedor.contato && (
+                      <p className="text-sm text-gray-600 mb-2">
+                        <Phone className="h-3 w-3 inline mr-1" />
+                        {fornecedor.contato}
+                      </p>
+                    )}
+
+                    <div className="flex justify-between items-center">
+                      <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">
+                        Ativo
+                      </span>
+                      <Button size="sm" variant="outline">
+                        Ver Detalhes
+                      </Button>
+                    </div>
                   </div>
-                  
-                  {fornecedor.contato && (
-                    <p className="text-sm text-gray-600 mb-2">
-                      <Phone className="h-3 w-3 inline mr-1" />
-                      {fornecedor.contato}
-                    </p>
-                  )}
-                  
-                  <div className="flex justify-between items-center">
-                    <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">
-                      Ativo
-                    </span>
-                    <Button size="sm" variant="outline">
-                      Ver Detalhes
-                    </Button>
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
-            
+
             {filteredFornecedores.length === 0 && (
               <div className="text-center py-8">
                 <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
@@ -177,7 +181,7 @@ const Markets = () => {
                   </span>
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-3">
                   {selectedFornecedor.contato ? (
@@ -193,15 +197,15 @@ const Markets = () => {
                   )}
                 </div>
               </div>
-              
+
               <div className="pt-4 border-t">
                 <div className="flex gap-3">
-                  <CreateOrderFromSupplierDialog 
+                  <CreateOrderFromSupplierDialog
                     fornecedor={selectedFornecedor}
                     onOrderCreated={refetch}
                   />
                   <ViewSupplierHistoryDialog fornecedor={selectedFornecedor} />
-                  <EditSupplierDialog 
+                  <EditSupplierDialog
                     fornecedor={selectedFornecedor}
                     onSupplierUpdated={refetch}
                   />

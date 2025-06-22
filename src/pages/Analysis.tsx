@@ -1,15 +1,53 @@
-
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { PageLayout } from '@/components/layout/PageLayout';
 import { useReceitas } from '@/hooks/useSupabaseData';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ChefHat } from 'lucide-react';
+import { ChefHat, ChevronUp, ChevronDown } from 'lucide-react';
 import { ViewRecipeIngredientsDialog } from '@/components/recipes/ViewRecipeIngredientsDialog';
 import { EditRecipeDialog } from '@/components/recipes/EditRecipeDialog';
 
 const Analysis = () => {
   const { receitas, loading: loadingReceitas, refetch } = useReceitas();
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [sortField, setSortField] = useState<'codreceita' | 'nome'>('codreceita');
+
+  const toggleSort = (field: 'codreceita' | 'nome') => {
+    if (sortField === field) {
+      setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortOrder('asc');
+    }
+  };
+
+  const sortedReceitas = useMemo(() => {
+    return [...receitas].sort((a, b) => {
+      const aValue = a[sortField];
+      const bValue = b[sortField];
+
+      if (sortOrder === 'asc') {
+        return aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
+      } else {
+        return aValue < bValue ? 1 : aValue > bValue ? -1 : 0;
+      }
+    });
+  }, [receitas, sortField, sortOrder]);
+
+  const renderSortIcon = (field: 'codreceita' | 'nome') => {
+    const isActive = sortField === field;
+    const Icon = sortOrder === 'asc' ? ChevronUp : ChevronDown;
+
+    return (
+      <span
+        className={`inline-flex ml-1 transition-opacity duration-200 ${
+          isActive ? 'opacity-100 visible' : 'opacity-0 invisible'
+        }`}
+      >
+        <Icon className="h-4 w-4" />
+      </span>
+    );
+  };
 
   if (loadingReceitas) {
     return (
@@ -27,7 +65,6 @@ const Analysis = () => {
   return (
     <PageLayout title="Cardápio">
       <div className="space-y-6">
-        {/* Cardápio - Receitas */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -39,14 +76,30 @@ const Analysis = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Código</TableHead>
-                  <TableHead>Nome</TableHead>
+                  <TableHead
+                    className="cursor-pointer hover:bg-gray-50 select-none"
+                    onClick={() => toggleSort('codreceita')}
+                  >
+                    <div className="flex items-center">
+                      Código
+                      {renderSortIcon('codreceita')}
+                    </div>
+                  </TableHead>
+                  <TableHead
+                    className="cursor-pointer hover:bg-gray-50 select-none"
+                    onClick={() => toggleSort('nome')}
+                  >
+                    <div className="flex items-center">
+                      Nome
+                      {renderSortIcon('nome')}
+                    </div>
+                  </TableHead>
                   <TableHead>Descrição</TableHead>
                   <TableHead>Ações</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {receitas.map((receita) => (
+                {sortedReceitas.map((receita) => (
                   <TableRow key={receita.codreceita}>
                     <TableCell className="font-medium">
                       {receita.codreceita}
@@ -73,7 +126,7 @@ const Analysis = () => {
                 ))}
               </TableBody>
             </Table>
-            
+
             {receitas.length === 0 && (
               <div className="text-center py-8">
                 <ChefHat className="h-12 w-12 text-gray-400 mx-auto mb-4" />
