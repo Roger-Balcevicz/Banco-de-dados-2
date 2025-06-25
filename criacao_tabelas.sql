@@ -22,7 +22,7 @@ CREATE TABLE ordem_compra (
     data_ordem DATE NOT NULL,
     codfornecedor INTEGER NOT NULL,
     codsetor INTEGER, -- quem solicitou
-    status VARCHAR(50) DEFAULT 'pendente',
+    status_id VARCHAR(50) DEFAULT 'pendente',
     CONSTRAINT fk_ordem_setor FOREIGN KEY (codfornecedor) REFERENCES fornecedor(codfornecedor),
     CONSTRAINT fk_ordem_fornecedor FOREIGN KEY (codsetor) REFERENCES setor(codsetor)        
 );
@@ -66,21 +66,25 @@ CREATE TABLE ingrediente_receita (
     CONSTRAINT fk_ingrediente_ingrediente_receita FOREIGN KEY (codingrediente) REFERENCES ingrediente(codingrediente)        
 );
 
--- Alteração na tabela ingrediente: adicionado campo estoque_minimo
-ALTER TABLE ingrediente
-ADD COLUMN estoque_minimo NUMERIC DEFAULT 10; 
-
 CREATE TABLE status (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(50) NOT NULL
 );
 
+-- Alteração na tabela ordem_compra: adicionado campo status_id
 ALTER TABLE ordem_compra
-ADD COLUMN codstatus INT NOT NULL
+ADD COLUMN status_id INT NOT NULL
 DEFAULT 1;
 
+-- Alteração na tabela ordem_compra: adicionado foreign key necessária
 ALTER TABLE ordem_compra
 ADD CONSTRAINT fk_ordem_status
 FOREIGN KEY (status_id) 
 REFERENCES status_ordem(id);
+
+-- Alteração na tabela ingrediente: adicionado campo estoque_minimo
+ALTER TABLE ingrediente
+ADD COLUMN estoque_minimo NUMERIC DEFAULT 10; 
+
+
 
