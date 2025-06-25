@@ -9,7 +9,7 @@ INSERT INTO setor (nome) VALUES
 ('Salão'),
 ('Administração'),
 ('Estoque Seco'),
-('Câmara Fria');
+('Geladeira Central');
 
 -- INSERTS PARA A TABELA INGREDIENTE
 INSERT INTO ingrediente (nome, descricao, unidade_medida, estoque_atual) VALUES
@@ -39,16 +39,16 @@ INSERT INTO fornecedor (nome, contato) VALUES
 
 -- INSERTS PARA A TABELA ORDEM_COMPRA
 INSERT INTO ordem_compra (data_ordem, codfornecedor, codsetor, status) VALUES
-('2025-06-01', 1, 1, 'pendente'),
-('2025-06-02', 2, 2, 'recebido'),
-('2025-06-03', 3, 3, 'pendente'),
-('2025-06-04', 4, 1, 'recebido'),
-('2025-06-05', 5, 2, 'pendente'),
-('2025-06-06', 6, 4, 'recebido'),
-('2025-06-07', 7, 5, 'pendente'),
-('2025-06-08', 8, 6, 'recebido'),
-('2025-06-09', 9, 7, 'pendente'),
-('2025-06-10', 10, 1, 'recebido');
+('2025-06-01', 1, 1, 1),
+('2025-06-02', 2, 2, 2),
+('2025-06-03', 3, 3, 1),
+('2025-06-04', 4, 1, 2),
+('2025-06-05', 5, 2, 1),
+('2025-06-06', 6, 4, 2),
+('2025-06-07', 7, 5, 1),
+('2025-06-08', 8, 6, 2),
+('2025-06-09', 9, 7, 1),
+('2025-06-10', 10, 1, 2);
 
 -- INSERTS PARA A TABELA ITEM_ORDEM_COMPRA
 INSERT INTO item_ordem_compra (codordem, codingrediente, quantidade, preco_unitario) VALUES
