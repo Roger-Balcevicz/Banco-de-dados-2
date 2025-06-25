@@ -65,7 +65,7 @@ O sistema conta com 9 tabelas principais:
 
 ### 🔔 Triggers
 
--`trg_recebimento_ordem_compra`
+- `trg_recebimento_ordem_compra`
   → Dispara movimentação de entrada no estoque automaticamento quando a ordem de compra é marcada como 'recebido'
   
 - `trg_recalcular_estoque_total`  
@@ -85,16 +85,16 @@ O sistema conta com 9 tabelas principais:
   → Ingredientes abaixo do estoque mínimo
 
 - `vw_compras_por_fornecedor`  
-  → Total gasto por fornecedor
+  → Total gasto em compras por fornecedor
 
 ---
 
 ## 🧪 Scripts disponíveis
 
 - `criacao_tabelas.sql` – Criação das tabelas principais
-- `inserts_exemplo.sql` – Dados de exemplo (10 registros por tabela)
-- `objetos.sql` – Functions, procedures, triggers
-- `Projeto_Final_BD2_2025.docx` – Documento com tabelas, campos e etc
+- `inserts_exemplo.sql` – Dados de exemplo ( registros das tabelas )
+- `objetos.sql` – Functions e triggers
+- `Projeto_Final_BD2_2025-ATUALIZADO.docx` – Documento com todo o conteúdo das tabelas.
 - `indices_tabelas.sql` – Documento com índices das tabelas
 - `view_tabelas.sql` – Documento com as views das tabelas
 
@@ -102,7 +102,7 @@ O sistema conta com 9 tabelas principais:
 
 ## 💡 Justificativas técnicas
 
-- **Procedures**: garantem certezas em operações de múltiplos passos
+- **Functions**: garantem certezas em operações de múltiplos passos
 - **Triggers**: asseguram consistência do estoque e alertas automáticos, sem depender da aplicação
 - **Views**: facilitam a análise de dados por setor de compras, financeiro e produção
 - **Índices**: otimizam pesquisas por nome, data, ingrediente e movimentações
